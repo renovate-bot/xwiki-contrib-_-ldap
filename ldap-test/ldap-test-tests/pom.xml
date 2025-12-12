@@ -82,7 +82,7 @@
   </dependencies>
   <dependencyManagement>
     <dependencies>
-      <!-- Required by dependanties in this version of XWiki -->
+      <!-- Required by dependencies in this version of XWiki -->
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
