@@ -28,11 +28,8 @@
   <translation>1</translation>
   <parent>Main.WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
-  <creationDate>1470233221000</creationDate>
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
-  <date>1470233243000</date>
-  <contentUpdateDate>1470233221000</contentUpdateDate>
   <version>1.1</version>
   <title/>
   <comment/>
@@ -51,4 +48,4 @@ ldap.resetGroupCacheSuccess=组缓存已经被重置
 ldap.resetGroupCacheButton=重置组缓存
 ldap.addNewEntry=新的进入
 </content>
-  </xwikidoc>
+</xwikidoc>

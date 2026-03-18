@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.xwiki.contrib</groupId>
     <artifactId>parent-platform</artifactId>
-    <version>8.4-16</version>
+    <version>10.11-2</version>
   </parent>
   <groupId>org.xwiki.contrib.ldap</groupId>
   <artifactId>ldap</artifactId>
@@ -87,30 +87,40 @@
           <analysisConfiguration><![CDATA[
             {
               "revapi": {
-                "java": {
-                  "filter": {
-                    "packages": {
-                      "regex": true,
-                      "include": ["org\\.xwiki\\..*"],
-                      "exclude": ["org\\.xwiki\\..*\\.internal(\\..*)?", "org\\.xwiki\\..*\\.test(\\..*)?"]
-                    }
+                "filter": {
+                  // We're ignoring all API incompatibilities from XWiki dependencies since they're already covered by their own builds.
+                  "archives": {
+                    "exclude": ["org\\.xwiki\\.commons:.*:.*", "org\\.xwiki\\.rendering:.*:.*", "org\\.xwiki\\.platform:.*:.*"]
                   }
-                },
-                "ignore": [
-                  {
-                    "code": "java.class.noLongerImplementsInterface",
-                    "old": "class org.xwiki.contrib.ldap.XWikiLDAPConnection.SRVRecordComparator",
-                    "new": "class org.xwiki.contrib.ldap.XWikiLDAPConnection.SRVRecordComparator",
-                    "justification": "False positive"
-                  }
-                ]
+                }
               }
-            }
-          ]]></analysisConfiguration>
+           }
+         ]]></analysisConfiguration>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  <dependencyManagement>
+    <!-- Dependencies coming from authservice-backport, which has a 8.4 parent -->
+    <dependencies>
+      <dependency>
+        <groupId>org.xwiki.platform</groupId>
+        <artifactId>xwiki-platform-display-macro</artifactId>
+        <version>${platform.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.xwiki.platform</groupId>
+        <artifactId>xwiki-platform-oldcore</artifactId>
+        <version>${platform.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.xwiki.platform</groupId>
+        <artifactId>xwiki-platform-administration-ui</artifactId>
+        <version>${platform.version}</version>
+      </dependency>
+    </dependencies>
+    <!-- End of dependencies coming from authservice-backport -->
+  </dependencyManagement>
   <modules>
     <module>ldap-api</module>
     <module>ldap-authenticator</module>

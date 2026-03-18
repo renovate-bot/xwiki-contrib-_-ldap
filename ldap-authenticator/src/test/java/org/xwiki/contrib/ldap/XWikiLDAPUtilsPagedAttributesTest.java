@@ -235,7 +235,7 @@ public class XWikiLDAPUtilsPagedAttributesTest
 
         // users are looked up via paginated search by member
         // note: if they are looked up as "group search", return nothing
-        when(connection.searchPaginated(Mockito.anyString(), Mockito.anyInt(), Mockito.anyString(),
+        when(connection.searchPaginated(Mockito.anyString(), Mockito.anyInt(), Mockito.any(),
             Mockito.any(), Mockito.anyBoolean())).thenAnswer(new Answer<PagedLDAPSearchResults>()
             {
 
@@ -292,7 +292,7 @@ public class XWikiLDAPUtilsPagedAttributesTest
 
         // groups and their members are looked up by direct ldap search (as it is basically a dn lookup)
         LDAPConnection ldapConnection = Mockito.mock(LDAPConnection.class);
-        when(ldapConnection.search(Mockito.anyString(), Mockito.anyInt(), Mockito.anyString(), Mockito.any(),
+        when(ldapConnection.search(Mockito.anyString(), Mockito.anyInt(), Mockito.any(), Mockito.any(),
             Mockito.anyBoolean())).thenAnswer(new Answer<LDAPSearchResults>()
             {
 
