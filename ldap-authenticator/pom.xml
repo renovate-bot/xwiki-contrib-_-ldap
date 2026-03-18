@@ -59,6 +59,11 @@
       <artifactId>authservice-backport-api</artifactId>
       <version>${authservice-backport.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.xwiki.contrib.user-common</groupId>
+      <artifactId>user-common-formatter</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
     <!-- Testing dependencies -->
     <dependency>

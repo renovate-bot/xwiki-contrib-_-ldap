@@ -26,8 +26,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.xwiki.contrib.usercommon.formatter.UserFormatterFactory;
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.ldap.LDAPDocumentHelper;
@@ -49,6 +48,9 @@ public class DefaultLDAPDocumentHelper implements LDAPDocumentHelper
     @Inject
     private Logger logger;
 
+    @Inject
+    private UserFormatterFactory userFormatterFactory;
+
     @Override
     public String getDocumentName(String documentNameFormat, String uidAttributeName,
         List<XWikiLDAPSearchAttribute> attributes, XWikiLDAPConfig config)
@@ -57,16 +59,14 @@ public class DefaultLDAPDocumentHelper implements LDAPDocumentHelper
         Map<String, String> valueMap = new HashMap<>();
         if (attributes != null) {
             // Complete existing configuration
-            for (Map.Entry<String, String> entry : memoryConfiguration.entrySet()) {
-                putVariable(valueMap, entry.getKey(), entry.getValue());
-            }
+            valueMap.putAll(memoryConfiguration);
 
             // Inject attributes
             for (XWikiLDAPSearchAttribute attribute : attributes) {
-                putVariable(valueMap, "ldap." + attribute.name, attribute.value);
+                valueMap.put("ldap." + attribute.name, attribute.value);
                 if (attribute.name.equals(uidAttributeName)) {
                     // Override the default uid value with the real one coming from LDAP
-                    putVariable(valueMap, "uid", attribute.value);
+                    valueMap.put("uid", attribute.value);
                 }
             }
         }
@@ -74,7 +74,7 @@ public class DefaultLDAPDocumentHelper implements LDAPDocumentHelper
         this.logger.debug("User page name format: {}", documentNameFormat);
         this.logger.debug("User page name substitution map: {}", valueMap);
 
-        String documentName = StrSubstitutor.replace(documentNameFormat, valueMap);
+        String documentName = userFormatterFactory.create(valueMap).format(documentNameFormat);
 
         logger.debug("User page name : [{}]", documentName);
 
@@ -84,25 +84,5 @@ public class DefaultLDAPDocumentHelper implements LDAPDocumentHelper
         logger.debug("Cleaned user page name : [{}]", documentName);
 
         return documentName;
-    }
-
-    private void putVariable(Map<String, String> map, String key, String value)
-    {
-        if (value != null) {
-            map.put(key, value);
-
-            map.put(key + "._lowerCase", value.toLowerCase());
-            map.put(key + "._upperCase", value.toUpperCase());
-
-            String cleanValue = clean(value);
-            map.put(key + "._clean", cleanValue);
-            map.put(key + "._clean._lowerCase", cleanValue.toLowerCase());
-            map.put(key + "._clean._upperCase", cleanValue.toUpperCase());
-        }
-    }
-
-    private String clean(String str)
-    {
-        return StringUtils.removePattern(str, "[\\.\\:\\s,@\\^\\/]");
     }
 }
